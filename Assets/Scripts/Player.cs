@@ -4,44 +4,36 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    
+    [SerializeField] Transform tfPlayer = null; // 플레이어 위치 정보 변수 선언
 
-    // 플레이어 위치 정보 변수 선언
-    [SerializeField] Transform tfPlayer = null;
+    [SerializeField] Rigidbody2D player = null; // 플레이어 Rigidbody2D 변수 선언
 
+    [SerializeField] PhysicsMaterial2D bounceMat, normalMat; // 2D 물리 오브젝트 간에 충돌이 발생할 때 일어나는 마찰과 탄성을 조정 변수 선언
 
-    // 플레이어 Rigidbody2D 변수 선언
-    [SerializeField] Rigidbody2D player = null;
+    public LayerMask groundLayer; // Physics.Raycast에서 사용할 레이어 지정 변수 선언
 
+    public bool isGrounded; // Physics2D.OverlapBox의 충돌을 감지할 bool 변수 선언
 
-    // 2D 물리 오브젝트 간에 충돌이 발생할 때 일어나는 마찰과 탄성을 조정 변수 선언
-    [SerializeField] PhysicsMaterial2D bounceMat, normalMat;
+    private Camera _camera = null; // 카메라가 기본좌표지도로 설정
 
-
-    // Physics.Raycast에서 사용할 레이어 지정 변수 선언
-    public LayerMask groundLayer;
-
-    // Physics2D.OverlapBox의 충돌을 감지할 bool 변수 선언
-    public bool isGrounded;
-
-
-    // 카메라가 기본좌표지도로 설정
-    private Camera _camera = null;
-
-
-    // 마우스 클릭 좌표 위치를 담을 벡터변수 선언
-    private Vector2 firstClickPosition;
+    private Vector2 firstClickPosition; // 마우스 클릭 좌표 위치를 담을 벡터변수 선언
     private Vector2 lastClickPosition;
+    
+    private float twoClickPositionDistance; // 두 클릭 사이의 거리의 값을 담을 변수 선언
+
+    public float jumpSpeed = 4; // 점프 속도 초기화
+    //========================================================================================================================================
 
 
-    // 두 클릭 사이의 거리의 값을 담을 변수 선언
-    private float twoClickPositionDistance;
-
-
-    // 점프 속도 초기화
-    public float jumpSpeed = 4;
-
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+    void Awake()
+    {
+        #region CS1612
+        //gameObject.transform.position.x = DataManager.Instance.nowPlayer.playerX;
+        //gameObject.transform.position.y = DataManager.Instance.nowPlayer.playerY;
+        #endregion
+        gameObject.transform.position = new Vector2(DataManager.Instance.nowPlayer.playerX, DataManager.Instance.nowPlayer.playerY);
+    }
     void Start()
     {
         _camera = Camera.main;
@@ -57,14 +49,12 @@ public class Player : MonoBehaviour
         Drop();
 
         if (isGrounded) 
-        {
-            // isGrounded == true 일때 Friction 
-            player.sharedMaterial = normalMat;
+        {      
+            player.sharedMaterial = normalMat; // isGrounded == true 일때 Friction 
         }
         else
-        {
-            // isGrounded == false 일때 Bounciness
-            player.sharedMaterial = bounceMat;
+        {   
+            player.sharedMaterial = bounceMat; // isGrounded == false 일때 Bounciness
         }
     }
 
