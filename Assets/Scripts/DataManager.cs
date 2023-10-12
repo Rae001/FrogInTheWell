@@ -7,8 +7,8 @@ using System.IO;
 public class PlayerData
 {
     // 플레이어의 위치값을 담을 변수들
-    public float playerX;
-    public float playerY;
+    public float playerX = 0.14f;
+    public float playerY = -4.58f;
 }
 
 
@@ -52,16 +52,14 @@ public class DataManager : MonoBehaviour
 
     public void SaveData()
     {
-        string data = JsonUtility.ToJson(nowPlayer);
-        File.WriteAllText(path, data);
+        string data = JsonUtility.ToJson(nowPlayer); // 객체의 공개 필드에 대한 JSON 포맷으로 직렬화
+        File.WriteAllText(path, data); // path 파일을 생성하고 파일에 내용을 작성한다.
     }
 
     public void LoadData()
     {
-        string data = File.ReadAllText(path);
-        nowPlayer = JsonUtility.FromJson<PlayerData>(data);
-        print(nowPlayer.playerX);
-        print(nowPlayer.playerY);
+        string data = File.ReadAllText(path); // path 파일을 읽어드려서 JSON을 data에 할당
+        nowPlayer = JsonUtility.FromJson<PlayerData>(data); // data를 다시 오브젝틀 전환하여 할당
     }
     public void DataClear()
     {

@@ -14,11 +14,24 @@ public class MainUI : MonoBehaviour
 
     // 게임 씬 전환 시 페이드 인 & 아웃 효과를 적용
     //===================================================================================
+    void Start()
+    {
+        if (File.Exists(DataManager.Instance.path)) // 데이터가 존재한다면 
+        {
+            loadGameUI.GetComponent<Button>().interactable = true; // 이어하기 버튼 활성화
+        }
+        else // 데이터가 없다면
+        {
+            loadGameUI.GetComponent<Button>().interactable = false; // 이어하기 버튼 비활성화
+        }
 
+        
+    }
 
     #region OnClick_LoadGameButton
     public void LoadGame() // 이어하기 버튼
     {
+        
         DataManager.Instance.LoadData(); // 데이터를 불러오고
         SceneManager.LoadScene(1); // 게임씬으로 이동
     }
